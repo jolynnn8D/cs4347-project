@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+streamlit = "*"
+ffmpeg-python = "*"
+torch = "*"
+librosa = "*"
+tqdm = "*"
+mido = "*"
+numpy = "==1.19.5"
+SoundFile = "*"
+mir_eval = "*"
+midani = "*"
+pydub = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
