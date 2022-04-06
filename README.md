@@ -1,7 +1,7 @@
 # cs4347-project
 Music Transcription Web App
 
-`pipenv shell`
+`pipenv shell`  
 `streamlit run app.py`
 
 ## To install dependencies
