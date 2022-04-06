@@ -24,8 +24,10 @@ def transcribe(file):
     with st.spinner("Animating... (this will take up to several minutes)"):
         process(MIDI_PATH, FINAL_MIDI)
         os.system('midani -s ./melody/settings.py')
-        os.system('ffmpeg -i ./output/animated_midi.mp4 -vcodec libx264 ./output/html_midi.mp4')
+        os.system('ffmpeg -y -i ./output/animated_midi.mp4 -vcodec libx264 ./output/html_midi.mp4')
+        os.remove('./output/animated_midi.mp4')
     st.subheader("Your video!")
+    st.subheader("You can download the video by clicking on the three dots in the bottom right of the video.")
     user_video_file = open('./output/html_midi.mp4', 'rb')
     user_video_bytes = user_video_file.read()
     st.video(user_video_bytes)
