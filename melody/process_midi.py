@@ -32,7 +32,6 @@ def process(file_path, output_path):
 
 def parse_notes(midi_path):
     mid2 = mido.MidiFile(midi_path)
-    print(mid2)
 
     pitch_list = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     notes = {}
@@ -50,7 +49,6 @@ def parse_notes(midi_path):
             notes[curr_time] = convert_note(msg.note)
         curr_time += msg.time
 
-    print(notes)
     return notes
 
 def create_settings(midi_path):

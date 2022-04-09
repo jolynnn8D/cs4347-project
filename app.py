@@ -8,7 +8,8 @@ from lyrics.inference import transcribe_lyrics
 
 st.title("CS4347 Music Transcription Application")
 
-INPUT_FILE_PATH = "./input/input_file.mp3"
+INPUT_FILE_DIR = "./input/"
+INPUT_FILE_PATH = INPUT_FILE_DIR + "input_file.mp3"
 OUTPUT_PATH = "./melody/results"
 MODEL_PATH = "./melody/model/model_1"
 
@@ -17,18 +18,35 @@ FINAL_MIDI = "./melody/results/finals.mid"
 
 def transcribe(file):
     lyrics = ""
+
     with st.spinner('Transcribing...'):
         st.write(file)
         sound = AudioSegment.from_mp3(file)      
+
+        if not os.path.exists(INPUT_FILE_DIR):
+            os.makedirs(INPUT_FILE_DIR)
+
         sound.export(INPUT_FILE_PATH,format="mp3")
+
+        if not os.path.exists(OUTPUT_PATH):
+            os.makedirs(OUTPUT_PATH)
+
         make_predictions(INPUT_FILE_PATH, OUTPUT_PATH, MODEL_PATH, 0.4, 0.5)
         lyrics = transcribe_lyrics(INPUT_FILE_PATH)
     st.write("Done transcribing!")
     with st.spinner("Animating... (this will take up to several minutes)"):
         process(MIDI_PATH, FINAL_MIDI)
         os.system('midani -s ./melody/settings.py')
+
+        if not os.path.exists('./output/animated_midi.mp4'):
+            print("The MIDI animation file was not created. If you did not install it manually, something went wrong. Please check if you have installed R on your local computer.")
+
         os.system('ffmpeg -y -i ./output/animated_midi.mp4 -vcodec libx264 ./output/html_midi.mp4')
-        os.remove('./output/animated_midi.mp4')
+
+        # This is an intermediary file
+        if os.path.exists('./output/animated_midi.mp4'):
+            os.remove('./output/animated_midi.mp4')      
+
     st.subheader("Your video!")
     st.subheader("You can download the video by clicking on the three dots in the bottom right of the video.")
     user_video_file = open('./output/html_midi.mp4', 'rb')

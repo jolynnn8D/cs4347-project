@@ -16,7 +16,8 @@ def split_audio(input_file):
 
 
 def transcribe_lyrics(input_file):
-    os.mkdir(TMP_FOLDER)
+    if not os.path.exists(TMP_FOLDER):
+        os.mkdir(TMP_FOLDER)
     
     split_audio(input_file)
 
@@ -31,4 +32,4 @@ def transcribe_lyrics(input_file):
 
     return " ".join(lyrics)
 
-print(transcribe_lyrics("input/input_file.mp3"))
+# print(transcribe_lyrics("input/input_file.mp3"))
