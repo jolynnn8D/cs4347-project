@@ -4,6 +4,7 @@ import os
 from pydub import AudioSegment
 from melody.inference import make_predictions
 from melody.process_midi import process
+from lyrics.inference import transcribe_lyrics
 
 st.title("CS4347 Music Transcription Application")
 
@@ -15,11 +16,13 @@ MIDI_PATH = "./melody/results/trans.mid"
 FINAL_MIDI = "./melody/results/finals.mid"
 
 def transcribe(file):
+    lyrics = ""
     with st.spinner('Transcribing...'):
         st.write(file)
         sound = AudioSegment.from_mp3(file)      
         sound.export(INPUT_FILE_PATH,format="mp3")
         make_predictions(INPUT_FILE_PATH, OUTPUT_PATH, MODEL_PATH, 0.4, 0.5)
+        lyrics = transcribe_lyrics(INPUT_FILE_PATH)
     st.write("Done transcribing!")
     with st.spinner("Animating... (this will take up to several minutes)"):
         process(MIDI_PATH, FINAL_MIDI)
@@ -31,6 +34,8 @@ def transcribe(file):
     user_video_file = open('./output/html_midi.mp4', 'rb')
     user_video_bytes = user_video_file.read()
     st.video(user_video_bytes)
+    st.subheader("Transcribed lyrics")
+    st.write(lyrics)
 
 st.subheader("Sample Video")
 video_file = open('./output/sample_video.mp4', 'rb')
