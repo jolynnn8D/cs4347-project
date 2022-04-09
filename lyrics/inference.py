@@ -4,31 +4,31 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 from speechbrain.pretrained import EncoderDecoderASR
 
-TMP_FOLDER = "lyrics/tmp"
-SNIPPET_LEN = 30000
+SNIPPET_FOLDER = "lyrics/audio_snippets"
+SNIPPET_LEN = 5000
 
 def split_audio(input_file):
     audio = AudioSegment.from_file(input_file)
 
     snippets = make_chunks(audio, SNIPPET_LEN)
     for index, snippet in enumerate(snippets):
-        snippet.export(f"{TMP_FOLDER}/input_snippet_{index}.mp3", format="mp3")
+        snippet.export(f"{SNIPPET_FOLDER}/input_snippet_{index}.mp3", format="mp3")
 
 
 def transcribe_lyrics(input_file):
-    os.mkdir(TMP_FOLDER)
+    if not os.path.exists(SNIPPET_FOLDER):
+        os.mkdir(SNIPPET_FOLDER)
     
     split_audio(input_file)
 
-    asr_model = EncoderDecoderASR.from_hparams(source="lyrics/pretrained_model",
-                                            savedir="tmp")
+    asr_model = EncoderDecoderASR.from_hparams(source="lyrics/pretrained_model", hparams_file="hyperparams.yaml",
+                                            savedir="lyrics/tmp")
     lyrics = []
-    for filename in os.listdir(TMP_FOLDER):
-        snippet_file = os.path.join(TMP_FOLDER, filename)
+    for filename in os.listdir(SNIPPET_FOLDER):
+        snippet_file = os.path.join(SNIPPET_FOLDER, filename)
         lyrics.append(asr_model.transcribe_file(snippet_file))
 
-    shutil.rmtree(TMP_FOLDER)
+    # shutil.rmtree(SNIPPET_FOLDER)
+    shutil.rmtree("lyrics/tmp")
 
     return " ".join(lyrics)
-
-print(transcribe_lyrics("input/input_file.mp3"))

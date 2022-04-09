@@ -5,17 +5,10 @@
 #           Mirco Ravanelli 2021
 # ############################################################################
 
-# Tokenizer parameters
-token_type: unigram # ["unigram", "bpe", "char"]
-token_output: 1000 # index(blank/eos/bos/unk) = 0
-character_coverage: 1.0
-annotation_read: words # field to read
-
 # Feature parameters
 sample_rate: 16000
 n_fft: 400
 n_mels: 20
-n_mfcc: 10
 win_length: 25
 
 # Model parameters
@@ -54,18 +47,17 @@ coverage_penalty: 1.5
 temperature: 1.25
 temperature_lm: 1.25
 
-compute_features: !new:speechbrain.lobes.features.MFCC
+compute_features: !new:speechbrain.lobes.features.Fbank
     sample_rate: !ref <sample_rate>
     n_fft: !ref <n_fft>
     n_mels: !ref <n_mels>
-    n_mfcc: !ref <n_mfcc>
-    deltas: False
+    win_length: !ref <win_length>
 
 normalize: !new:speechbrain.processing.features.InputNormalization
     norm_type: global
 
 enc: !new:speechbrain.lobes.models.CRDNN.CRDNN
-    input_shape: [null, 101, 110]
+    input_shape: [null, null, !ref <n_mels>]
     activation: !ref <activation>
     dropout: !ref <dropout>
     cnn_blocks: !ref <cnn_blocks>
