@@ -17,6 +17,7 @@ midani = "*"
 pydub = "*"
 ffmpeg = "*"
 matplotlib = "*"
+speechbrain = "*"
 
 [dev-packages]
 

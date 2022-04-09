@@ -2,3 +2,7 @@ output/*
 midani_output/*
 melody/results/*
 input/*
+tmp/*
+lyrics/audio_snippets/
+lyrics/tmp/
+input_snippet_*.mp3

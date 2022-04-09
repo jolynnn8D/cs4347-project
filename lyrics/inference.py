@@ -28,7 +28,7 @@ def transcribe_lyrics(input_file):
         snippet_file = os.path.join(SNIPPET_FOLDER, filename)
         lyrics.append(asr_model.transcribe_file(snippet_file))
 
-    # shutil.rmtree(SNIPPET_FOLDER)
+    shutil.rmtree(SNIPPET_FOLDER)
     shutil.rmtree("lyrics/tmp")
 
     return " ".join(lyrics)
