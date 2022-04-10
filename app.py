@@ -1,5 +1,6 @@
 import streamlit as st
 import os 
+import glob
 
 from pydub import AudioSegment
 from melody.inference import make_predictions
@@ -46,6 +47,9 @@ def transcribe(file):
         # This is an intermediary file
         if os.path.exists('./output/animated_midi.mp4'):
             os.remove('./output/animated_midi.mp4')      
+
+        for snippet in glob.glob('input_snippet_*.mp3'):
+            os.remove(snippet)
 
     st.subheader("Your video!")
     st.subheader("You can download the video by clicking on the three dots in the bottom right of the video.")
