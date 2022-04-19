@@ -138,7 +138,7 @@ lm_model: !new:speechbrain.lobes.models.RNNLM.RNNLM
 
 # We compose the inference (encoder) pipeline.
 encoder: !new:speechbrain.nnet.containers.LengthsCapableSequential
-    input_shape: [null, 101, 110]
+    input_shape: [null, null, !ref <n_mels>]
     # input_size: 55
     compute_features: !ref <compute_features>
     normalize: !ref <normalize>
